@@ -134,7 +134,7 @@ class RecipeCard extends HTMLElement {
       // --
       const starInt = searchForKey(data, 'ratingValue');
       const img2 = document.createElement('img');
-      img2.setAttribute('src', '/assets/images/icons/' + Math.round(starInt) + '-star.svg');
+      img2.setAttribute('src', 'assets/images/icons/' + Math.round(starInt) + '-star.svg');
       img2.setAttribute('alt', starInt + ' stars');
       // --
       const span2 = document.createElement('span');

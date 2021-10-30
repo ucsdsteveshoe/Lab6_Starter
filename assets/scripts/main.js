@@ -5,7 +5,10 @@
 const recipes = [
   'https://introweb.tech/assets/json/ghostCookies.json',
   'https://introweb.tech/assets/json/birthdayCake.json',
-  'https://introweb.tech/assets/json/chocolateChip.json'
+  'https://introweb.tech/assets/json/chocolateChip.json',
+  '/assets/recipes/recipie1.json',
+  '/assets/recipes/recipie2.json',
+  '/assets/recipes/recipie3.json'
 ];
 
 // Once all of the recipes that were specified above have been fetched, their
@@ -43,6 +46,22 @@ async function fetchRecipes() {
     // in the recipes folder and fetch them from there. You'll need to add their paths to the recipes array.
 
     // Part 1 Expose - TODO
+    let i_fetch = 0;
+
+    recipes.forEach((v, i) => {
+      fetch(v)
+        .then(response => {
+          return response.json()})
+        .then(data => {
+          ++i_fetch;
+          recipeData[i] = (data)
+
+          if (i_fetch == recipes.length) {
+            resolve(true);
+          }
+        })
+        .catch(err => reject(false));
+    });
   });
 }
 
@@ -54,6 +73,15 @@ function createRecipeCards() {
   // show any others you've added when the user clicks on the "Show more" button.
 
   // Part 1 Expose - TODO
+  const main = document.querySelector('main');
+
+  Object.values(recipeData).forEach((data, i) => {
+    if (i < 3) {
+      const card = document.createElement('recipe-card');
+      card.data = data;
+      main.appendChild(card);
+    }
+  });
 }
 
 function bindShowMore() {
@@ -65,4 +93,32 @@ function bindShowMore() {
   // in the recipeData object where you stored them/
 
   // Part 2 Explore - TODO
+  const main = document.querySelector('main');
+  const button = document.querySelector('button');
+  let hidden = true;
+
+  button.addEventListener('click', () => {
+    if (hidden) {
+      button.innerHTML = "Show less";
+      Object.values(recipeData).forEach((data, i) => {
+        if (i >= 3) {
+          const card = document.createElement('recipe-card');
+          card.data = data;
+          main.appendChild(card);
+        }
+      });
+    } else {
+      button.innerHTML = "Show more";
+      main.innerHTML = "";
+      Object.values(recipeData).forEach((data, i) => {
+        if (i < 3) {
+          const card = document.createElement('recipe-card');
+          card.data = data;
+          main.appendChild(card);
+        }
+      });
+    }
+
+    hidden = !hidden;
+  })
 }
